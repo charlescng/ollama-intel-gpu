@@ -1,7 +1,13 @@
-FROM ubuntu:24.04
+# Use phusion/baseimage as base image. To make your builds reproducible, make
+# sure you lock down to a specific version, not to `latest`!
+# See https://github.com/phusion/baseimage-docker/blob/master/Changelog.md for
+# a list of version numbers.
+FROM phusion/baseimage:noble-1.0.2
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=america/los_angeles
 
+# Use baseimage-docker's init system.
+CMD ["/sbin/my_init"]
 
 # Base packages
 RUN apt update && \
@@ -40,6 +46,8 @@ RUN cd / && \
 
 # OLLAMA_HOST is hardcoded to the local interface which stops other containers from connecting
 RUN sed -i "s/export OLLAMA_HOST='127.0.0.1:11434'/export OLLAMA_HOST='0.0.0.0:11434'/" start-ollama.sh
-ENV OLLAMA_HOST=0.0.0.0:11434
+
+# Clean up APT when done.
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENTRYPOINT ["/bin/bash", "/start-ollama.sh"]
