@@ -38,7 +38,7 @@ rm *.deb
 # Install Ollama Portable Zip
 ARG IPEXLLM_RELEASE_REPO=ipex-llm/ipex-llm
 ARG IPEXLLM_RELEASE_VERSON=v2.3.0-nightly
-ARG IPEXLLM_PORTABLE_ZIP_FILENAME=ollama-ipex-llm-2.3.0b20250630-ubuntu.tgz
+ARG IPEXLLM_PORTABLE_ZIP_FILENAME=ollama-ipex-llm-2.3.0b20250710-ubuntu.tgz
 RUN cd / && \
   wget https://github.com/${IPEXLLM_RELEASE_REPO}/releases/download/${IPEXLLM_RELEASE_VERSON}/${IPEXLLM_PORTABLE_ZIP_FILENAME} && \
   tar xvf ${IPEXLLM_PORTABLE_ZIP_FILENAME} --strip-components=1 -C / && \
@@ -46,6 +46,8 @@ RUN cd / && \
 
 # OLLAMA_HOST is hardcoded to the local interface which stops other containers from connecting
 RUN sed -i "s/export OLLAMA_HOST='127.0.0.1:11434'/export OLLAMA_HOST='0.0.0.0:11434'/" start-ollama.sh
+# Works around an intermittent model loading failure with the Arc B580
+RUN sed -i "s/export OLLAMA_KEEP_ALIVE=10m/export OLLAMA_KEEP_ALIVE=-1/" start-ollama.sh
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
