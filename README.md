@@ -1,3 +1,6 @@
+# Repository is archived
+Intel has archived the [IPEX-LLM](https://github.com/intel/ipex-llm) repo. No more work is being done. Ollama with IPEX acceleration is frozen at 0.9.3. I suggest users switch to [LocalAI](https://localai.io/). The intel-sycl-f16-llama-cpp (llama-cpp) backend works fine with the Arc B580 from my testing, depending on the model.
+
 # ollama-intel-gpu
 
 This repo illustrates the use of Ollama with support for Intel ARC GPU based via ipex-llm and Ollama Portable ZIP support.  Run the recently released [deepseek-r1](https://github.com/deepseek-ai/DeepSeek-R1) model on your local Intel ARC GPU based PC using Linux
